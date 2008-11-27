@@ -6,7 +6,6 @@
 %define plugindir %(vdr-config --plugindir  2>/dev/null || echo ERROR)
 %define configdir %(vdr-config --configdir  2>/dev/null || echo ERROR)
 %define videodir  %(vdr-config --videodir   2>/dev/null || echo ERROR)
-%define audiodir  %(vdr-config --audiodir   2>/dev/null || echo ERROR)
 %define datadir   %(vdr-config --datadir    2>/dev/null || echo ERROR)
 %define cachedir  %(vdr-config --cachedir   2>/dev/null || echo ERROR)
 %define vardir    %(vdr-config --vardir     2>/dev/null || echo ERROR)
@@ -15,7 +14,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Sound playback plugin for VDR
 
 Group:          Applications/Multimedia
@@ -88,7 +87,6 @@ sed -e 's|/var/lib/vdr|%{vardir}|' %{SOURCE4} > %{name}-mplayer.conf
 %build
 make %{?_smp_mflags} LIBDIR=. VDRDIR=%{_libdir}/vdr WITH_OSS_OUTPUT=1 \
     libvdr-mp3.so libvdr-mplayer.so
-echo "%{audiodir};Local hard drive;0" > mp3sources.conf
 echo "%{datadir}/DVD-VCD;DVD or VCD;0" > mplayersources.conf
 
 
@@ -108,7 +106,7 @@ install -pm 755 examples/mount.sh.example \
 
 # MP3 files
 install -pm 755 libvdr-mp3.so.%{apiver} $RPM_BUILD_ROOT%{plugindir}
-install -pm 644 mp3sources.conf $RPM_BUILD_ROOT%{configdir}/plugins
+install -pm 644 vdr-mp3-mp3sources.conf $RPM_BUILD_ROOT%{configdir}/plugins
 install -pm 755 examples/image_convert.sh.example \
   $RPM_BUILD_ROOT%{plugindir}/bin/image_convert.sh
 %{__perl} -pe 's|/var/cache/vdr/|%{cachedir}/|' %{SOURCE3} \
@@ -141,9 +139,6 @@ if [ $1 -eq 1 ] ; then
   %{plugindir}/bin/mediasources.sh \
     >> %{configdir}/plugins/mp3sources.conf || :
 else
-  if ! grep %{audiodir} %{configdir}/plugins/mp3sources.conf &>/dev/null ; then
-    echo "%{audiodir}" >> %{configdir}/plugins/mp3sources.conf || :
-  fi
   r=global.mplayer.resume
   if [ -f %{videodir}/$r -a ! -f %{vardir}/$r ] ; then
     mv %{videodir}/$r %{vardir}/$r
@@ -188,6 +183,9 @@ fi
 
 
 %changelog
+* Fri Nov 28 2008 Felix Kaechele <felix at fetzig dot org> - 0.10.1-5
+- removed all references to audiodir since it's not used by vdr core
+
 * Mon Aug 04 2008 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info - 0.10.1-4
 - rebuild
 
