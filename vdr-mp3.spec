@@ -14,7 +14,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Sound playback plugin for VDR
 
 Group:          Applications/Multimedia
@@ -26,6 +26,7 @@ Source2:        %{name}-mediasources.sh
 Source3:        %{name}-mp3.conf
 Source4:        %{name}-mplayer.conf
 Source5:        %{name}-mplayer-minimal.sh
+Source6:        %{name}-mp3sources.conf
 Patch0:         %{name}-mplayer.sh-0.8.7-lircrc.patch
 Patch1:         %{name}-mplayer.sh-framedrop.patch
 Patch2:         %{name}-mplayer.sh-identify.patch
@@ -106,7 +107,7 @@ install -pm 755 examples/mount.sh.example \
 
 # MP3 files
 install -pm 755 libvdr-mp3.so.%{apiver} $RPM_BUILD_ROOT%{plugindir}
-install -pm 644 vdr-mp3-mp3sources.conf $RPM_BUILD_ROOT%{configdir}/plugins
+install -pm 644 %{SOURCE6} $RPM_BUILD_ROOT%{configdir}/plugins
 install -pm 755 examples/image_convert.sh.example \
   $RPM_BUILD_ROOT%{plugindir}/bin/image_convert.sh
 %{__perl} -pe 's|/var/cache/vdr/|%{cachedir}/|' %{SOURCE3} \
@@ -183,6 +184,9 @@ fi
 
 
 %changelog
+* Fri Nov 28 2008 Felix Kaechele <felix at fetzig dot org> - 0.10.1-6
+- fixed small error
+
 * Fri Nov 28 2008 Felix Kaechele <felix at fetzig dot org> - 0.10.1-5
 - removed all references to audiodir since it's not used by vdr core
 
