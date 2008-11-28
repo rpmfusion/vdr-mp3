@@ -14,7 +14,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Sound playback plugin for VDR
 
 Group:          Applications/Multimedia
@@ -107,7 +107,7 @@ install -pm 755 examples/mount.sh.example \
 
 # MP3 files
 install -pm 755 libvdr-mp3.so.%{apiver} $RPM_BUILD_ROOT%{plugindir}
-install -pm 644 %{SOURCE6} $RPM_BUILD_ROOT%{configdir}/plugins
+install -pm 644 %{SOURCE6} $RPM_BUILD_ROOT%{configdir}/plugins/mp3sources.conf
 install -pm 755 examples/image_convert.sh.example \
   $RPM_BUILD_ROOT%{plugindir}/bin/image_convert.sh
 %{__perl} -pe 's|/var/cache/vdr/|%{cachedir}/|' %{SOURCE3} \
@@ -184,6 +184,9 @@ fi
 
 
 %changelog
+* Fri Nov 28 2008 Felix Kaechele <felix at fetzig dot org> - 0.10.1-7
+- fixed another tiny error :)
+
 * Fri Nov 28 2008 Felix Kaechele <felix at fetzig dot org> - 0.10.1-6
 - fixed small error
 
