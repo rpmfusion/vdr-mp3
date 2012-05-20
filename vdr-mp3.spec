@@ -3,18 +3,9 @@
 #   - patch to allow playing audio files (currently insists to find video)
 #   - audio CD support?
 
-%define plugindir %(vdr-config --plugindir  2>/dev/null || echo ERROR)
-%define configdir %(vdr-config --configdir  2>/dev/null || echo ERROR)
-%define videodir  %(vdr-config --videodir   2>/dev/null || echo ERROR)
-%define datadir   %(vdr-config --datadir    2>/dev/null || echo ERROR)
-%define cachedir  %(vdr-config --cachedir   2>/dev/null || echo ERROR)
-%define vardir    %(vdr-config --vardir     2>/dev/null || echo ERROR)
-%define apiver    %(vdr-config --apiversion 2>/dev/null || echo ERROR)
-%define vdr_user  %(vdr-config --user       2>/dev/null || echo ERROR)
-
 Name:           vdr-mp3
-Version:        0.10.1
-Release:        8%{?dist}
+Version:        0.10.2
+Release:        4%{?dist}
 Summary:        Sound playback plugin for VDR
 
 Group:          Applications/Multimedia
@@ -32,15 +23,17 @@ Patch1:         %{name}-mplayer.sh-framedrop.patch
 Patch2:         %{name}-mplayer.sh-identify.patch
 Patch3:         %{name}-mplayer.sh-0.8.7-defaults.patch
 Patch4:         %{name}-0.10.1-no-debug.patch
+Patch5:         %{name}-0.10.2-Makefile.patch
+Patch6:         %{name}-0.10.2-fsf-fix.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  vdr-devel >= 1.4.0
+BuildRequires:  vdr-devel >= 1.6.0-41
 BuildRequires:  libsndfile-devel >= 1.0.0
 BuildRequires:  libvorbis-devel
 BuildRequires:  %{__perl}
 BuildRequires:  libmad-devel
 BuildRequires:  libid3tag-devel
-Requires:       vdr(abi) = %{apiver}
+Requires:       vdr(abi)%{?_isa} = %{vdr_apiversion}
 Requires:       netpbm-progs
 Requires:       mjpegtools >= 1.8.0
 Requires:       file
@@ -53,8 +46,8 @@ formats are those supported by libmad, libsndfile and libvorbis.
 Summary:        MPlayer plugin for VDR
 Group:          Applications/Multimedia
 BuildRequires:  %{__perl}
-Requires:       vdr(abi) = %{apiver}
-Requires:       mplayer >= 1.0-0.lvn.0.19.pre7
+Requires:       vdr(abi)%{?_isa} = %{vdr_apiversion}
+Requires:       mplayer >= 1.0
 
 %description -n vdr-mplayer
 The MPlayer plugin adds the ability to call MPlayer from within VDR,
@@ -69,87 +62,85 @@ primary output device.
 %patch2
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 %{__perl} -pi -e \
-  's|CFGFIL=.*|CFGFIL="%{configdir}/plugins/mplayer.sh.conf"|' \
+  's|CFGFIL=.*|CFGFIL="%{vdr_configdir}/plugins/mplayer.sh.conf"|' \
   mplayer.sh
 %{__perl} -pi -e \
-  's|"/var/cache/images/mp3"|"%{cachedir}/mp3/images"|' \
+  's|"/var/cache/images/mp3"|"%{vdr_cachedir}/mp3/images"|' \
   data-mp3.c README
 %{__perl} -pi -e \
-  's|"/video/plugins/DVD-VCD"|"%{datadir}/DVD-VCD"| ;
+  's|"/video/plugins/DVD-VCD"|"%{vdr_datadir}/DVD-VCD"| ;
    s|^MPLAYER=.*|MPLAYER="%{_bindir}/mplayer"|' \
   mplayer.sh.conf
 for f in HISTORY MANUAL README ; do
   iconv -f iso-8859-1 -t utf-8 $f > $f.utf-8 ; mv $f.utf-8 $f
 done
-sed -e 's|/var/lib/vdr|%{vardir}|' %{SOURCE4} > %{name}-mplayer.conf
+sed -e 's|/var/lib/vdr|%{vdr_vardir}|' %{SOURCE4} > %{name}-mplayer.conf
 
 
 %build
 make %{?_smp_mflags} LIBDIR=. VDRDIR=%{_libdir}/vdr WITH_OSS_OUTPUT=1 \
     libvdr-mp3.so libvdr-mplayer.so
-echo "%{datadir}/DVD-VCD;DVD or VCD;0" > mplayersources.conf
+echo "%{vdr_datadir}/DVD-VCD;DVD or VCD;0" > mplayersources.conf
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 # Common dirs
-install -dm 755 $RPM_BUILD_ROOT%{plugindir}
-install -dm 755 $RPM_BUILD_ROOT%{configdir}/plugins
-install -dm 755 $RPM_BUILD_ROOT%{plugindir}/bin
+install -dm 755 $RPM_BUILD_ROOT%{vdr_plugindir}
+install -dm 755 $RPM_BUILD_ROOT%{vdr_configdir}/plugins
+install -dm 755 $RPM_BUILD_ROOT%{vdr_plugindir}/bin
 install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/vdr-plugins.d
 
 # Common files
-install -pm 755 %{SOURCE2} $RPM_BUILD_ROOT%{plugindir}/bin/mediasources.sh
+install -pm 755 %{SOURCE2} $RPM_BUILD_ROOT%{vdr_plugindir}/bin/mediasources.sh
 install -pm 755 examples/mount.sh.example \
-  $RPM_BUILD_ROOT%{plugindir}/bin/mount.sh
+  $RPM_BUILD_ROOT%{vdr_plugindir}/bin/mount.sh
 
 # MP3 files
-install -pm 755 libvdr-mp3.so.%{apiver} $RPM_BUILD_ROOT%{plugindir}
-install -pm 644 %{SOURCE6} $RPM_BUILD_ROOT%{configdir}/plugins/mp3sources.conf
+install -pm 755 libvdr-mp3.so.%{vdr_apiversion} $RPM_BUILD_ROOT%{vdr_plugindir}
+install -pm 644 %{SOURCE6} $RPM_BUILD_ROOT%{vdr_configdir}/plugins/mp3sources.conf
 install -pm 755 examples/image_convert.sh.example \
-  $RPM_BUILD_ROOT%{plugindir}/bin/image_convert.sh
-%{__perl} -pe 's|/var/cache/vdr/|%{cachedir}/|' %{SOURCE3} \
+  $RPM_BUILD_ROOT%{vdr_plugindir}/bin/image_convert.sh
+%{__perl} -pe 's|/var/cache/vdr/|%{vdr_cachedir}/|' %{SOURCE3} \
   > $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/vdr-plugins.d/mp3.conf
 chmod 644 $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/vdr-plugins.d/mp3.conf
-install -dm 755 $RPM_BUILD_ROOT%{cachedir}/mp3/images
-i=$RPM_BUILD_ROOT%{cachedir}/mp3/id3info.cache ; > $i ; chmod 644 $i
+install -dm 755 $RPM_BUILD_ROOT%{vdr_cachedir}/mp3/images
+i=$RPM_BUILD_ROOT%{vdr_cachedir}/mp3/id3info.cache ; > $i ; chmod 644 $i
 
 # MPlayer files
-install -pm 755 libvdr-mplayer.so.%{apiver} $RPM_BUILD_ROOT%{plugindir}
-install -dm 755 $RPM_BUILD_ROOT%{datadir}/DVD-VCD
-touch $RPM_BUILD_ROOT%{datadir}/DVD-VCD/{DVD,VCD}
-chmod 644 $RPM_BUILD_ROOT%{datadir}/DVD-VCD/*
+install -pm 755 libvdr-mplayer.so.%{vdr_apiversion} $RPM_BUILD_ROOT%{vdr_plugindir}
+install -dm 755 $RPM_BUILD_ROOT%{vdr_datadir}/DVD-VCD
+touch $RPM_BUILD_ROOT%{vdr_datadir}/DVD-VCD/{DVD,VCD}
+chmod 644 $RPM_BUILD_ROOT%{vdr_datadir}/DVD-VCD/*
 install -pm 644 mplayersources.conf mplayer.sh.conf \
-  $RPM_BUILD_ROOT%{configdir}/plugins
-install -pm 755 mplayer.sh $RPM_BUILD_ROOT%{plugindir}/bin/mplayer.sh
-install -pm 755 %{SOURCE5} $RPM_BUILD_ROOT%{plugindir}/bin/mplayer-minimal.sh
+  $RPM_BUILD_ROOT%{vdr_configdir}/plugins
+install -pm 755 mplayer.sh $RPM_BUILD_ROOT%{vdr_plugindir}/bin/mplayer.sh
+install -pm 755 %{SOURCE5} $RPM_BUILD_ROOT%{vdr_plugindir}/bin/mplayer-minimal.sh
 install -pm 644 %{name}-mplayer.conf \
   $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/vdr-plugins.d/mplayer.conf
-install -dm 755 $RPM_BUILD_ROOT%{vardir}
-i=$RPM_BUILD_ROOT%{vardir}/global.mplayer.resume ; > $i ; chmod 644 $i
-
-
-%clean
-rm -rf $RPM_BUILD_ROOT
+install -dm 755 $RPM_BUILD_ROOT%{vdr_vardir}
+i=$RPM_BUILD_ROOT%{vdr_vardir}/global.mplayer.resume ; > $i ; chmod 644 $i
 
 
 %post
 if [ $1 -eq 1 ] ; then
-  %{plugindir}/bin/mediasources.sh \
-    >> %{configdir}/plugins/mp3sources.conf || :
+  %{vdr_plugindir}/bin/mediasources.sh \
+    >> %{vdr_configdir}/plugins/mp3sources.conf || :
 else
   r=global.mplayer.resume
-  if [ -f %{videodir}/$r -a ! -f %{vardir}/$r ] ; then
-    mv %{videodir}/$r %{vardir}/$r
+  if [ -f %{vdr_videodir}/$r -a ! -f %{vdr_vardir}/$r ] ; then
+    mv %{vdr_videodir}/$r %{vdr_vardir}/$r
   fi
 fi
 
 %post -n vdr-mplayer
 if [ $1 -eq 1 ] ; then
-  %{plugindir}/bin/mediasources.sh \
-    >> %{configdir}/plugins/mplayersources.conf || :
+  %{vdr_plugindir}/bin/mediasources.sh \
+    >> %{vdr_configdir}/plugins/mplayersources.conf || :
 fi
 
 
@@ -157,33 +148,52 @@ fi
 %defattr(-,root,root,-)
 %doc COPYING HISTORY MANUAL README examples/mount.sh.example
 %doc examples/mp3sources.conf.example examples/network.sh.example
-%config(noreplace) %{configdir}/plugins/mp3sources.conf
+%config(noreplace) %{vdr_configdir}/plugins/mp3sources.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/vdr-plugins.d/mp3.conf
-%{plugindir}/libvdr-mp3.so.%{apiver}
-%{plugindir}/bin/image_convert.sh
-%{plugindir}/bin/mediasources.sh
-%{plugindir}/bin/mount.sh
+%{vdr_plugindir}/libvdr-mp3.so.%{vdr_apiversion}
+%{vdr_plugindir}/bin/image_convert.sh
+%{vdr_plugindir}/bin/mediasources.sh
+%{vdr_plugindir}/bin/mount.sh
 %defattr(-,%{vdr_user},root,-)
-%dir %{cachedir}/mp3/
-%dir %{cachedir}/mp3/images/
-%ghost %{cachedir}/mp3/id3info.cache
+%dir %{vdr_cachedir}/mp3/
+%dir %{vdr_cachedir}/mp3/images/
+%ghost %{vdr_cachedir}/mp3/id3info.cache
 
 %files -n vdr-mplayer
 %defattr(-,root,root,-)
 %doc COPYING HISTORY MANUAL README examples/mplayer.sh.example
 %doc examples/mount.sh.example
-%config(noreplace) %{configdir}/plugins/mplayer*.conf
+%config(noreplace) %{vdr_configdir}/plugins/mplayer*.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/vdr-plugins.d/mplayer.conf
-%{plugindir}/libvdr-mplayer.so.%{apiver}
-%{plugindir}/bin/mediasources.sh
-%{plugindir}/bin/mount.sh
-%{plugindir}/bin/mplayer*.sh
-%{datadir}/DVD-VCD/
+%{vdr_plugindir}/libvdr-mplayer.so.%{vdr_apiversion}
+%{vdr_plugindir}/bin/mediasources.sh
+%{vdr_plugindir}/bin/mount.sh
+%{vdr_plugindir}/bin/mplayer*.sh
+%{vdr_datadir}/DVD-VCD/
 %defattr(-,%{vdr_user},root,-)
-%ghost %{vardir}/global.mplayer.resume
+%ghost %{vdr_vardir}/global.mplayer.resume
 
 
 %changelog
+* Sat May 19 2012 Martin Gansser <linux4martin@gmx.de> - 0.10.2-4
+- reset the release tag to 1 for release update
+
+* Tue May 15 2012 Martin Gansser <linux4martin@gmx.de> - 0.10.2-3
+- added correct permissions for vdr_vardir and vdr_cachedir
+
+* Mon May 14 2012 Martin Gansser <linux4martin@gmx.de> - 0.10.2-2
+- more cleanups
+- fixed the use of vdr macros
+
+* Sun May 13 2012 Martin Gansser <linux4martin@gmx.de> - 0.10.2-1
+- Rebuilt for new release
+
+* Fri Mar 02 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.10.1-10
+- Rebuilt for c++ ABI breakage
+
+* Wed Feb 08 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.10.1-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Sun Mar 29 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.10.1-8
 - rebuild for new F11 features
 
