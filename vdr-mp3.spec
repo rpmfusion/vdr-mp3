@@ -25,7 +25,6 @@ Patch3:         %{name}-mplayer.sh-0.8.7-defaults.patch
 Patch4:         %{name}-0.10.1-no-debug.patch
 Patch5:         %{name}-0.10.2-Makefile.patch
 Patch6:         %{name}-0.10.2-fsf-fix.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  vdr-devel >= 1.7.30
 BuildRequires:  libsndfile-devel >= 1.0.0
@@ -87,8 +86,6 @@ echo "%{vdr_resdir}/DVD-VCD;DVD or VCD;0" > mplayersources.conf
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 # Common dirs
 install -dm 755 $RPM_BUILD_ROOT%{vdr_plugindir}
 install -dm 755 $RPM_BUILD_ROOT%{vdr_configdir}/plugins
@@ -177,6 +174,9 @@ fi
 %changelog
 * Wed Oct 3 2012 Martin Gansser <linux4martin@gmx.de> - 0.10.2-5
 - Adapt to VDR 1.7.30.
+- changed vdr-devel BuildRequires for Fedora 18
+- spec file cleanup
+- rebuild for Fedora 18
 
 * Sat May 19 2012 Martin Gansser <linux4martin@gmx.de> - 0.10.2-4
 - reset the release tag to 1 for release update
