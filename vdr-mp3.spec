@@ -5,7 +5,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.2
-Release:        4%{?dist}
+Release:        6%{?dist}
 Summary:        Sound playback plugin for VDR
 
 Group:          Applications/Multimedia
@@ -25,9 +25,8 @@ Patch3:         %{name}-mplayer.sh-0.8.7-defaults.patch
 Patch4:         %{name}-0.10.1-no-debug.patch
 Patch5:         %{name}-0.10.2-Makefile.patch
 Patch6:         %{name}-0.10.2-fsf-fix.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  vdr-devel >= 1.6.0-41
+BuildRequires:  vdr-devel >= 1.7.30
 BuildRequires:  libsndfile-devel >= 1.0.0
 BuildRequires:  libvorbis-devel
 BuildRequires:  %{__perl}
@@ -71,7 +70,7 @@ primary output device.
   's|"/var/cache/images/mp3"|"%{vdr_cachedir}/mp3/images"|' \
   data-mp3.c README
 %{__perl} -pi -e \
-  's|"/video/plugins/DVD-VCD"|"%{vdr_datadir}/DVD-VCD"| ;
+  's|"/video/plugins/DVD-VCD"|"%{vdr_resdir}/DVD-VCD"| ;
    s|^MPLAYER=.*|MPLAYER="%{_bindir}/mplayer"|' \
   mplayer.sh.conf
 for f in HISTORY MANUAL README ; do
@@ -83,12 +82,10 @@ sed -e 's|/var/lib/vdr|%{vdr_vardir}|' %{SOURCE4} > %{name}-mplayer.conf
 %build
 make %{?_smp_mflags} LIBDIR=. VDRDIR=%{_libdir}/vdr WITH_OSS_OUTPUT=1 \
     libvdr-mp3.so libvdr-mplayer.so
-echo "%{vdr_datadir}/DVD-VCD;DVD or VCD;0" > mplayersources.conf
+echo "%{vdr_resdir}/DVD-VCD;DVD or VCD;0" > mplayersources.conf
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 # Common dirs
 install -dm 755 $RPM_BUILD_ROOT%{vdr_plugindir}
 install -dm 755 $RPM_BUILD_ROOT%{vdr_configdir}/plugins
@@ -113,9 +110,9 @@ i=$RPM_BUILD_ROOT%{vdr_cachedir}/mp3/id3info.cache ; > $i ; chmod 644 $i
 
 # MPlayer files
 install -pm 755 libvdr-mplayer.so.%{vdr_apiversion} $RPM_BUILD_ROOT%{vdr_plugindir}
-install -dm 755 $RPM_BUILD_ROOT%{vdr_datadir}/DVD-VCD
-touch $RPM_BUILD_ROOT%{vdr_datadir}/DVD-VCD/{DVD,VCD}
-chmod 644 $RPM_BUILD_ROOT%{vdr_datadir}/DVD-VCD/*
+install -dm 755 $RPM_BUILD_ROOT%{vdr_resdir}/DVD-VCD
+touch $RPM_BUILD_ROOT%{vdr_resdir}/DVD-VCD/{DVD,VCD}
+chmod 644 $RPM_BUILD_ROOT%{vdr_resdir}/DVD-VCD/*
 install -pm 644 mplayersources.conf mplayer.sh.conf \
   $RPM_BUILD_ROOT%{vdr_configdir}/plugins
 install -pm 755 mplayer.sh $RPM_BUILD_ROOT%{vdr_plugindir}/bin/mplayer.sh
@@ -169,12 +166,22 @@ fi
 %{vdr_plugindir}/bin/mediasources.sh
 %{vdr_plugindir}/bin/mount.sh
 %{vdr_plugindir}/bin/mplayer*.sh
-%{vdr_datadir}/DVD-VCD/
+%{vdr_resdir}/DVD-VCD/
 %defattr(-,%{vdr_user},root,-)
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 
 %changelog
+* Wed Oct 3 2012 Martin Gansser <linux4martin@gmx.de> - 0.10.2-6
+- spec file cleanup
+- spell checking in %%changelog section
+
+* Wed Oct 3 2012 Martin Gansser <linux4martin@gmx.de> - 0.10.2-5
+- Adapt to VDR 1.7.30.
+- changed vdr-devel BuildRequires for Fedora 18
+- spec file cleanup
+- rebuild for Fedora 18
+
 * Sat May 19 2012 Martin Gansser <linux4martin@gmx.de> - 0.10.2-4
 - reset the release tag to 1 for release update
 
