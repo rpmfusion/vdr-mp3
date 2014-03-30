@@ -5,7 +5,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.2
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Sound playback plugin for VDR
 
 Group:          Applications/Multimedia
@@ -26,7 +26,7 @@ Patch4:         %{name}-0.10.1-no-debug.patch
 Patch5:         %{name}-0.10.2-Makefile.patch
 Patch6:         %{name}-0.10.2-fsf-fix.patch
 
-BuildRequires:  vdr-devel >= 1.7.30
+BuildRequires:  vdr-devel >= 2.0.6
 BuildRequires:  libsndfile-devel >= 1.0.0
 BuildRequires:  libvorbis-devel
 BuildRequires:  %{__perl}
@@ -172,6 +172,9 @@ fi
 
 
 %changelog
+* Sun Mar 30 2014 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-9
+- Rebuild
+
 * Mon May 27 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.10.2-8
 - Rebuilt for x264/FFmpeg
 
