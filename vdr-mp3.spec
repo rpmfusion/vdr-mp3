@@ -5,7 +5,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.2
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Sound playback plugin for VDR
 
 Group:          Applications/Multimedia
@@ -172,6 +172,9 @@ fi
 
 
 %changelog
+* Mon Sep 01 2014 Sérgio Basto <sergio@serjux.com> - 0.10.2-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Sun Mar 30 2014 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-9
 - Rebuild
 
