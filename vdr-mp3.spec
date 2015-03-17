@@ -5,7 +5,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.2
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Sound playback plugin for VDR
 
 Group:          Applications/Multimedia
@@ -25,6 +25,7 @@ Patch3:         %{name}-mplayer.sh-0.8.7-defaults.patch
 Patch4:         %{name}-0.10.1-no-debug.patch
 Patch5:         %{name}-0.10.2-Makefile.patch
 Patch6:         %{name}-0.10.2-fsf-fix.patch
+Patch7:         %{name}-vdr2.1.2-compat.patch
 
 BuildRequires:  vdr-devel >= 2.0.6
 BuildRequires:  libsndfile-devel >= 1.0.0
@@ -63,6 +64,7 @@ primary output device.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 %{__perl} -pi -e \
   's|CFGFIL=.*|CFGFIL="%{vdr_configdir}/plugins/mplayer.sh.conf"|' \
   mplayer.sh
@@ -143,8 +145,9 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc COPYING HISTORY MANUAL README examples/mount.sh.example
+%doc HISTORY MANUAL README examples/mount.sh.example
 %doc examples/mp3sources.conf.example examples/network.sh.example
+%license COPYING
 %config(noreplace) %{vdr_configdir}/plugins/mp3sources.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/vdr-plugins.d/mp3.conf
 %{vdr_plugindir}/libvdr-mp3.so.%{vdr_apiversion}
@@ -158,8 +161,9 @@ fi
 
 %files -n vdr-mplayer
 %defattr(-,root,root,-)
-%doc COPYING HISTORY MANUAL README examples/mplayer.sh.example
+%doc HISTORY MANUAL README examples/mplayer.sh.example
 %doc examples/mount.sh.example
+%license COPYING
 %config(noreplace) %{vdr_configdir}/plugins/mplayer*.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/vdr-plugins.d/mplayer.conf
 %{vdr_plugindir}/libvdr-mplayer.so.%{vdr_apiversion}
@@ -172,6 +176,10 @@ fi
 
 
 %changelog
+* Tue Mar 17 2015 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-11
+- added vdr-mp3-vdr2.1.2-compat.patch
+- mark license files as %%license where available
+
 * Mon Sep 01 2014 Sérgio Basto <sergio@serjux.com> - 0.10.2-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
