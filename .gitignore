@@ -1,2 +1,7 @@
 mplayer.sh-0.8.7.tar.gz
 vdr-mp3-0.10.2.tar.gz
+/vdr-mp3-mediasources.sh
+/vdr-mp3-mp3.conf
+/vdr-mp3-mplayer.conf
+/vdr-mp3-mplayer-minimal.sh
+/vdr-mp3-mp3sources.conf
