@@ -1,0 +1,11 @@
+--- mp3-0.10.2/player-mp3.c.orig	2017-03-21 14:57:53.820931295 +0100
++++ mp3-0.10.2/player-mp3.c	2017-03-21 15:02:38.834642016 +0100
+@@ -1429,7 +1429,7 @@
+         int real=sr;
+         CHECK(ioctl(fd,SNDCTL_DSP_SPEED,&real));
+         d(printf("oss: DSP samplerate now %d\n",real))
+-        if((unsigned int)abs(real-sr)<sr/50) {
++        if((unsigned int)abs(real-(int)sr)<sr/50) {
+           outSr=sr;
+           d(printf("mp3-oss: DSP reset done\n"))
+           return true;

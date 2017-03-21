@@ -26,6 +26,7 @@ Patch4:         %{name}-0.10.1-no-debug.patch
 Patch5:         %{name}-0.10.2-Makefile.patch
 Patch6:         %{name}-0.10.2-fsf-fix.patch
 Patch7:         %{name}-vdr2.1.2-compat.patch
+Patch8:         %{name}-fix-overloaded-ambiguous.patch
 
 BuildRequires:  vdr-devel >= 2.0.6
 BuildRequires:  libsndfile-devel >= 1.0.0
@@ -65,6 +66,7 @@ primary output device.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 %{__perl} -pi -e \
   's|CFGFIL=.*|CFGFIL="%{vdr_configdir}/plugins/mplayer.sh.conf"|' \
   mplayer.sh
@@ -176,8 +178,8 @@ fi
 
 
 %changelog
-* Mon Mar 20 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 0.10.2-12
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+* Tue Mar 21 2017 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-12
+- Add vdr-mp3-fix-overloaded-ambiguous.patch
 
 * Tue Mar 17 2015 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-11
 - added vdr-mp3-vdr2.1.2-compat.patch
