@@ -5,7 +5,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.2
-Release:        17%{?dist}
+Release:        18%{?dist}
 Summary:        Sound playback plugin for VDR
 
 Group:          Applications/Multimedia
@@ -28,6 +28,7 @@ Patch6:         %{name}-0.10.2-fsf-fix.patch
 Patch7:         %{name}-vdr2.1.2-compat.patch
 Patch8:         %{name}-fix-overloaded-ambiguous.patch
 
+BuildRequires:  gcc-c++
 BuildRequires:  vdr-devel >= 2.0.6
 BuildRequires:  libsndfile-devel >= 1.0.0
 BuildRequires:  libvorbis-devel
@@ -178,6 +179,9 @@ fi
 
 
 %changelog
+* Thu Oct 11 2018 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-18
+- Add BR gcc-c++
+
 * Sun Aug 19 2018 Leigh Scott <leigh123linux@googlemail.com> - 0.10.2-17
 - Rebuilt for Fedora 29 Mass Rebuild binutils issue
 
