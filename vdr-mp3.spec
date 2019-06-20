@@ -5,10 +5,8 @@
 
 Name:           vdr-mp3
 Version:        0.10.2
-Release:        19%{?dist}
+Release:        20%{?dist}
 Summary:        Sound playback plugin for VDR
-
-Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://www.muempf.de/
 Source0:        http://www.muempf.de/down/%{name}-%{version}.tar.gz
@@ -179,6 +177,9 @@ fi
 
 
 %changelog
+* Tue Jun 18 2019 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-20
+- Rebuilt for new VDR API version
+
 * Mon Mar 04 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.10.2-19
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
