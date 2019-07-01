@@ -5,7 +5,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.2
-Release:        21%{?dist}
+Release:        22%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPLv2+
 URL:            http://www.muempf.de/
@@ -177,6 +177,9 @@ fi
 
 
 %changelog
+* Mon Jul 01 2019 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-22
+- Rebuilt for new VDR API version 2.4.1
+
 * Sun Jun 30 2019 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-21
 - Rebuilt for new VDR API version
 
