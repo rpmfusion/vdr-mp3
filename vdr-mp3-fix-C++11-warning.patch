@@ -1,0 +1,31 @@
+--- mp3-0.10.2/data-mp3.c.orig	2021-01-04 11:50:54.614365552 +0100
++++ mp3-0.10.2/data-mp3.c	2021-01-04 11:58:56.790633754 +0100
+@@ -43,7 +43,7 @@
+ // image suffixes to search
+ const char *img_suff[] = { "jpg","png","gif",0 };
+ // exclude list for instant playlist creation
+-const char *excl_pl[] = { "*"PLAYLISTEXT,"*.jpg","*.gif","*.png",0 };
++const char *excl_pl[] = { "*" PLAYLISTEXT,"*.jpg","*.gif","*.png",0 };
+ // exclude list for song browser
+ const char *excl_br[] = { ".*","*.jpg","*.gif","*.png",0 };
+ 
+@@ -550,7 +550,7 @@
+ 
+ bool cPlayLists::Load(cFileSource *Source)
+ {
+-  static const char *spec[] = { "*"PLAYLISTEXT,0 };
++  static const char *spec[] = { "*" PLAYLISTEXT,0 };
+   Clear();
+   bool res=ScanDir(Source,0,stFile,spec,0,false);
+   Sort();
+--- mp3-0.10.2/data-mp3.c.orig	2021-01-04 12:49:18.870762858 +0100
++++ mp3-0.10.2/data-mp3.c	2021-01-04 12:50:19.619315257 +0100
+@@ -409,7 +409,7 @@
+   if(f) {
+     char buffer[512];
+     result=true;
+-    while(fgets(buffer,sizeof(buffer),f)>0) {
++    while(fgets(buffer,sizeof(buffer),f)!=0) {
+       if(buffer[0]=='#') {
+         if(!strncmp(buffer,WINAMPEXT,strlen(WINAMPEXT))) {
+           d(printf("mp3: detected WinAmp style playlist\n"))

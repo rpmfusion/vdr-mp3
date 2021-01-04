@@ -25,6 +25,7 @@ Patch5:         %{name}-0.10.2-Makefile.patch
 Patch6:         %{name}-0.10.2-fsf-fix.patch
 Patch7:         %{name}-vdr2.1.2-compat.patch
 Patch8:         %{name}-fix-overloaded-ambiguous.patch
+Patch9:         %{name}-fix-C++11-warning.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  vdr-devel >= 2.0.6
@@ -66,6 +67,7 @@ primary output device.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 %{__perl} -pi -e \
   's|CFGFIL=.*|CFGFIL="%{vdr_configdir}/plugins/mplayer.sh.conf"|' \
   mplayer.sh
@@ -179,6 +181,7 @@ fi
 %changelog
 * Mon Jan 04 2021 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-28
 - Rebuilt for new VDR API version
+- Add vdr-mp3-fix-C++11-warning.patch that fixes:
 
 * Wed Oct 21 2020 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-27
 - Rebuilt for new VDR API version
