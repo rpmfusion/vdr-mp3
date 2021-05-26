@@ -4,28 +4,20 @@
 #   - audio CD support?
 
 Name:           vdr-mp3
-Version:        0.10.2
-Release:        30%{?dist}
+Version:        0.10.4
+Release:        1%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPLv2+
-URL:            http://www.muempf.de/
-Source0:        http://www.muempf.de/down/%{name}-%{version}.tar.gz
-Source1:        http://batleth.sapienti-sat.org/projects/VDR/versions/mplayer.sh-0.8.7.tar.gz
+URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
+Source0:        https://github.com/vdr-projects/vdr-plugin-mp3/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source1:        http://batleth.sapienti-sat.org/projects/VDR/versions/mplayer.sh-0.8.7.tar.gz 
 Source2:        %{name}-mediasources.sh
 Source3:        %{name}-mp3.conf
 Source4:        %{name}-mplayer.conf
 Source5:        %{name}-mplayer-minimal.sh
 Source6:        %{name}-mp3sources.conf
-Patch0:         %{name}-mplayer.sh-0.8.7-lircrc.patch
-Patch1:         %{name}-mplayer.sh-framedrop.patch
-Patch2:         %{name}-mplayer.sh-identify.patch
-Patch3:         %{name}-mplayer.sh-0.8.7-defaults.patch
-Patch4:         %{name}-0.10.1-no-debug.patch
-Patch5:         %{name}-0.10.2-Makefile.patch
-Patch6:         %{name}-0.10.2-fsf-fix.patch
-Patch7:         %{name}-vdr2.1.2-compat.patch
-Patch8:         %{name}-fix-overloaded-ambiguous.patch
-Patch9:         %{name}-fix-C++11-warning.patch
+Patch0:         %{name}-%{version}-Makefile.patch
+Patch1:         %{name}-fix-overloaded-ambiguous.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  vdr-devel >= 2.0.6
@@ -57,17 +49,9 @@ primary output device.
 
 
 %prep
-%setup -q -n mp3-%{version} -a 1
-%patch0
-%patch1
-%patch2
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
+%setup -q -n vdr-plugin-mp3-%{version} -a 1
+%patch0 -p1
+%patch1 -p1
 %{__perl} -pi -e \
   's|CFGFIL=.*|CFGFIL="%{vdr_configdir}/plugins/mplayer.sh.conf"|' \
   mplayer.sh
@@ -177,8 +161,10 @@ fi
 %defattr(-,%{vdr_user},root,-)
 %ghost %{vdr_vardir}/global.mplayer.resume
 
-
 %changelog
+* Wed May 26 2021 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-1
+- Use fork because its under maintenance
+
 * Fri Apr 30 2021 Martin Gansser <martinkg@fedoraproject.org> - 0.10.2-30
 - Rebuilt for new VDR API version
 

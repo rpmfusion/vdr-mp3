@@ -1,5 +1,5 @@
---- mp3-0.10.2/Makefile.orig	2012-05-11 23:41:20.963758554 +0200
-+++ mp3-0.10.2/Makefile	2012-05-11 23:37:45.748768802 +0200
+--- vdr-plugin-mp3-0.10.4/Makefile.orig	2021-05-26 10:48:07.383248811 +0200
++++ vdr-plugin-mp3-0.10.4/Makefile	2021-05-26 10:51:34.028257791 +0200
 @@ -80,13 +80,13 @@
  
  ### The version number of VDR (taken from VDR's "config.h"):
