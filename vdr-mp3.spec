@@ -5,7 +5,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPLv2+
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
@@ -69,7 +69,7 @@ sed -e 's|/var/lib/vdr|%{vdr_vardir}|' %{SOURCE4} > %{name}-mplayer.conf
 
 
 %build
-make %{?_smp_mflags} LIBDIR=. VDRDIR=%{_libdir}/vdr WITH_OSS_OUTPUT=1 \
+%make_build LIBDIR=. VDRDIR=%{_libdir}/vdr WITH_OSS_OUTPUT=1 \
     libvdr-mp3.so libvdr-mplayer.so
 echo "%{vdr_resdir}/DVD-VCD;DVD or VCD;0" > mplayersources.conf
 
@@ -162,6 +162,9 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Thu Dec 30 2021 Martin Gansser <martinkg@fedoraproject.org> -  0.10.4-3
+- Rebuilt for new VDR API version
+
 * Tue Aug 03 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.10.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
