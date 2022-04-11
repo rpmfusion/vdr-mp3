@@ -3,9 +3,12 @@
 #   - patch to allow playing audio files (currently insists to find video)
 #   - audio CD support?
 
+# version we want build against
+%global vdr_version 2.6.1
+
 Name:           vdr-mp3
 Version:        0.10.4
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPLv2+
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
@@ -20,7 +23,7 @@ Patch0:         %{name}-%{version}-Makefile.patch
 Patch1:         %{name}-fix-overloaded-ambiguous.patch
 
 BuildRequires:  gcc-c++
-BuildRequires:  vdr-devel >= 2.0.6
+BuildRequires:  vdr-devel >= %{vdr_version}
 BuildRequires:  libsndfile-devel >= 1.0.0
 BuildRequires:  libvorbis-devel
 BuildRequires:  %{__perl}
@@ -162,6 +165,9 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Mon Apr 11 2022 Sérgio Basto <sergio@serjux.com> - 0.10.4-5
+- Rebuilt for VDR 2.6.x
+
 * Fri Feb 04 2022 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-4
 - Rebuilt for new VDR API version
 
