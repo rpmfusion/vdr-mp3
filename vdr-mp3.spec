@@ -4,14 +4,14 @@
 #   - audio CD support?
 
 # version we want build against
-%global vdr_version 2.6.1
-%if 0%{?fedora} >= 38
 %global vdr_version 2.6.3
+%if 0%{?fedora} >= 40
+%global vdr_version 2.6.5
 %endif
 
 Name:           vdr-mp3
 Version:        0.10.4
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPLv2+
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
@@ -26,6 +26,7 @@ Patch0:         %{name}-%{version}-Makefile.patch
 Patch1:         %{name}-fix-overloaded-ambiguous.patch
 
 BuildRequires:  gcc-c++
+BuildRequires:  gettext
 BuildRequires:  vdr-devel >= %{vdr_version}
 BuildRequires:  libsndfile-devel >= 1.0.0
 BuildRequires:  libvorbis-devel
@@ -168,6 +169,10 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Tue Jan 09 2024 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-10
+- Rebuilt for new VDR API version
+- Add BR gettext for rawhide
+
 * Wed Aug 02 2023 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 0.10.4-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
 
