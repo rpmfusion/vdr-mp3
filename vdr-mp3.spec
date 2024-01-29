@@ -6,12 +6,12 @@
 # version we want build against
 %global vdr_version 2.6.3
 %if 0%{?fedora} >= 40
-%global vdr_version 2.6.5
+%global vdr_version 2.6.6
 %endif
 
 Name:           vdr-mp3
 Version:        0.10.4
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPLv2+
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
@@ -169,6 +169,9 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Fri Jan 26 2024 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-11
+- Rebuilt for new VDR API version
+
 * Tue Jan 09 2024 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-10
 - Rebuilt for new VDR API version
 - Add BR gettext for rawhide
