@@ -6,12 +6,12 @@
 # version we want build against
 %global vdr_version 2.6.3
 %if 0%{?fedora} >= 40
-%global vdr_version 2.6.6
+%global vdr_version 2.6.7
 %endif
 
 Name:           vdr-mp3
 Version:        0.10.4
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPLv2+
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
@@ -169,6 +169,9 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Sun Apr 21 2024 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-13
+- Rebuilt for new VDR API version
+
 * Sun Feb 04 2024 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 0.10.4-12
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
 
