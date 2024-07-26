@@ -6,12 +6,12 @@
 # version we want build against
 %global vdr_version 2.6.3
 %if 0%{?fedora} >= 40
-%global vdr_version 2.6.7
+%global vdr_version 2.6.9
 %endif
 
 Name:           vdr-mp3
 Version:        0.10.4
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPLv2+
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
@@ -57,8 +57,8 @@ primary output device.
 
 %prep
 %setup -q -n vdr-plugin-mp3-%{version} -a 1
-%patch0 -p1
-%patch1 -p1
+%patch 0 -p1
+%patch 1 -p1
 %{__perl} -pi -e \
   's|CFGFIL=.*|CFGFIL="%{vdr_configdir}/plugins/mplayer.sh.conf"|' \
   mplayer.sh
@@ -169,6 +169,9 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Fri Jul 26 2024 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-14
+- Rebuilt for new VDR API version 2.6.9
+
 * Sun Apr 21 2024 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-13
 - Rebuilt for new VDR API version
 
