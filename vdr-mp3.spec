@@ -3,17 +3,20 @@
 #   - patch to allow playing audio files (currently insists to find video)
 #   - audio CD support?
 
-# version we want build against
+# version we want to build against
 %global vdr_version 2.6.3
-%if 0%{?fedora} >= 40
+# Set vdr_version based on Fedora version
+%if 0%{?fedora} >= 42
+%global vdr_version 2.7.2
+%elif 0%{?fedora} >= 40
 %global vdr_version 2.6.9
 %endif
 
 Name:           vdr-mp3
 Version:        0.10.4
-Release:        14%{?dist}
+Release:        16%{?dist}
 Summary:        Sound playback plugin for VDR
-License:        GPLv2+
+License:        GPL-2.0-or-later
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
 Source0:        https://github.com/vdr-projects/vdr-plugin-mp3/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        http://batleth.sapienti-sat.org/projects/VDR/versions/mplayer.sh-0.8.7.tar.gz 
@@ -24,6 +27,7 @@ Source5:        %{name}-mplayer-minimal.sh
 Source6:        %{name}-mp3sources.conf
 Patch0:         %{name}-%{version}-Makefile.patch
 Patch1:         %{name}-fix-overloaded-ambiguous.patch
+Patch2:         0002-mp3-Removal-of-deprecated-interface-functions.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gettext
@@ -59,6 +63,7 @@ primary output device.
 %setup -q -n vdr-plugin-mp3-%{version} -a 1
 %patch 0 -p1
 %patch 1 -p1
+%patch 2 -p1
 %{__perl} -pi -e \
   's|CFGFIL=.*|CFGFIL="%{vdr_configdir}/plugins/mplayer.sh.conf"|' \
   mplayer.sh
@@ -169,6 +174,12 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Mon Oct 21 2024 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-16
+- Rebuilt for new VDR API version 2.7.3
+
+* Mon Sep 30 2024 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-15
+- Add 0002-mp3-Removal-of-deprecated-interface-functions.patch for vdr-2.7.x
+
 * Fri Jul 26 2024 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-14
 - Rebuilt for new VDR API version 2.6.9
 
