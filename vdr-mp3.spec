@@ -13,8 +13,8 @@
 %endif
 
 Name:           vdr-mp3
-Version:        0.10.4
-Release:        16%{?dist}
+Version:        0.10.5
+Release:        1%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPL-2.0-or-later
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
@@ -25,9 +25,8 @@ Source3:        %{name}-mp3.conf
 Source4:        %{name}-mplayer.conf
 Source5:        %{name}-mplayer-minimal.sh
 Source6:        %{name}-mp3sources.conf
-Patch0:         %{name}-%{version}-Makefile.patch
+Patch0:         %{name}-0.10.4-Makefile.patch
 Patch1:         %{name}-fix-overloaded-ambiguous.patch
-Patch2:         0002-mp3-Removal-of-deprecated-interface-functions.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gettext
@@ -63,7 +62,6 @@ primary output device.
 %setup -q -n vdr-plugin-mp3-%{version} -a 1
 %patch 0 -p1
 %patch 1 -p1
-%patch 2 -p1
 %{__perl} -pi -e \
   's|CFGFIL=.*|CFGFIL="%{vdr_configdir}/plugins/mplayer.sh.conf"|' \
   mplayer.sh
@@ -174,6 +172,9 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Fri Jan 03 2025 Martin Gansser <martinkg@fedoraproject.org> - 0.10.5-1
+- Update to 0.10.5
+
 * Mon Oct 21 2024 Martin Gansser <martinkg@fedoraproject.org> - 0.10.4-16
 - Rebuilt for new VDR API version 2.7.3
 
