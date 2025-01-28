@@ -14,7 +14,7 @@
 
 Name:           vdr-mp3
 Version:        0.10.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPL-2.0-or-later
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
@@ -172,6 +172,9 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Tue Jan 28 2025 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 0.10.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
 * Fri Jan 03 2025 Martin Gansser <martinkg@fedoraproject.org> - 0.10.5-1
 - Update to 0.10.5
 
