@@ -3,15 +3,18 @@
 #   - patch to allow playing audio files (currently insists to find video)
 #   - audio CD support?
 
-%global vdr_version 2.6.9
 # Set vdr_version based on Fedora version
-%if 0%{?fedora} >= 42
+%if 0%{?fedora} >= 43
+%global vdr_version 2.7.5
+%elif 0%{?fedora} == 42
 %global vdr_version 2.7.4
+%else
+%global vdr_version 2.6.9
 %endif
 
 Name:           vdr-mp3
 Version:        0.10.5
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPL-2.0-or-later
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
@@ -169,6 +172,9 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Tue May 27 2025 Martin Gansser <martinkg@fedoraproject.org> - 0.10.5-4
+- Rebuilt for new VDR API version 2.7.5
+
 * Sun Mar 16 2025 Martin Gansser <martinkg@fedoraproject.org> - 0.10.5-3
 - Rebuilt for new VDR API version 2.7.4
 
