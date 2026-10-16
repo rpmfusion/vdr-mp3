@@ -1,23 +1,15 @@
+%global pname   mp3
+# The plugin ABI is expressed through vdr(abi); don't export private .so provides.
+%global __provides_exclude_from ^%{vdr_libdir}/.*\\.so.*$
+
 # TODO:
 # - mplayer.sh:
 #   - patch to allow playing audio files (currently insists to find video)
 #   - audio CD support?
 
-# Set vdr_version based on Fedora version
-# Default
-%global vdr_version 2.7.7
-
-%if 0%{?fedora} == 43
-%global vdr_version 2.7.7
-%elif 0%{?fedora} == 44
-%global vdr_version 2.8.1
-%elif 0%{?fedora} > 44
-%global vdr_version 2.8.2
-%endif
-
 Name:           vdr-mp3
 Version:        0.10.5
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        Sound playback plugin for VDR
 License:        GPL-2.0-or-later
 URL:            https://github.com/vdr-projects/vdr-plugin-mp3/
@@ -33,7 +25,7 @@ Patch1:         %{name}-fix-overloaded-ambiguous.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gettext
-BuildRequires:  vdr-devel >= %{vdr_version}
+BuildRequires:  vdr-devel
 BuildRequires:  libsndfile-devel >= 1.0.0
 BuildRequires:  libvorbis-devel
 BuildRequires:  %{__perl}
@@ -62,7 +54,7 @@ primary output device.
 
 
 %prep
-%setup -q -n vdr-plugin-mp3-%{version} -a 1
+%setup -q -n vdr-plugin-%{pname}-%{version} -a 1
 %patch 0 -p1
 %patch 1 -p1
 %{__perl} -pi -e \
@@ -150,7 +142,7 @@ fi
 %license COPYING
 %config(noreplace) %{vdr_configdir}/plugins/mp3sources.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/vdr-plugins.d/mp3.conf
-%{vdr_plugindir}/libvdr-mp3.so.%{vdr_apiversion}
+%{vdr_libdir}/libvdr-%{pname}.so.%{vdr_apiversion}
 %{vdr_plugindir}/bin/image_convert.sh
 %{vdr_plugindir}/bin/mediasources.sh
 %{vdr_plugindir}/bin/mount.sh
@@ -166,7 +158,7 @@ fi
 %license COPYING
 %config(noreplace) %{vdr_configdir}/plugins/mplayer*.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/vdr-plugins.d/mplayer.conf
-%{vdr_plugindir}/libvdr-mplayer.so.%{vdr_apiversion}
+%{vdr_libdir}/libvdr-mplayer.so.%{vdr_apiversion}
 %{vdr_plugindir}/bin/mediasources.sh
 %{vdr_plugindir}/bin/mount.sh
 %{vdr_plugindir}/bin/mplayer*.sh
@@ -175,6 +167,9 @@ fi
 %ghost %{vdr_vardir}/global.mplayer.resume
 
 %changelog
+* Fri Oct 16 2026 Martin Gansser <martinkg@fedoraproject.org> - 0.10.5-14
+- Rebuilt for new VDR 2.8.3 API version 14
+
 * Sun Aug 02 2026 RPM Fusion Release Engineering <leigh123linux@rpmfusion.org> - 0.10.5-13
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_45_Mass_Rebuild
 
